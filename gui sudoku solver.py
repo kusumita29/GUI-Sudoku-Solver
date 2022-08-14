@@ -19,8 +19,8 @@ solved_label.grid(row= 2, column= 1, columnspan= 10, pady= 10)
 cells = {}
 
 # to check if the input is a valid number between 1-9
-def validate_number(dgt):
-    check = (dgt.isdigit() or dgt == "") and len(dgt) < 2
+def validate_number(P):
+    check = (P.isdigit() or P == "") and len(P) < 2
     return check
 
 reg = root.register(validate_number)
@@ -29,7 +29,7 @@ reg = root.register(validate_number)
 def draw_smaller_grid(row, column, bgcolor):
     for i in range(3):
         for j in range(3):
-            e = Entry(root, width= 7 , bg = bgcolor, justify= 'center', validate= 'key', validatecommand = (reg, "%dgt"))
+            e = Entry(root, width= 7 , bg = bgcolor, justify= 'center', validate= 'key', validatecommand = (reg, '%P'))
             e.grid(row = row + i+1, column = column +j+1, sticky = "nsew", padx= 2, pady= 2, ipady = 14)
             cells[(row + i+1, column + j+1)] = e 
 
@@ -50,8 +50,8 @@ def clear_values():
     solved_label.configure(text="")
     for row in range(2,11):
         for col in range(1, 10):
-            cells = cells[(row, col)]
-            cells.delete(0, "end")
+            cell = cells[(row, col)]
+            cell.delete(0, "end")
 
 # to store all the values enter in the grid as a list in order to solve the puzzle
 # 0 is added if no value is entered for the grid
@@ -79,13 +79,13 @@ btn = Button(root, command = clear_values, text = "Clear Grid", width = 10)
 btn.grid(row= 20, column= 4, columnspan= 5, pady= 10)
 
 # updating the values in the displayed grid if a solution is present
-def update_grid(grid):
-    solution = sudoku_solution(grid)
+def update_grid(s):
+    solution = sudoku_solution(s)
     if solution != "Not Solvable":
         for row in range(2, 11):
             for column in range(1, 10):
                 cells[(row, column)].delete(0, "end")
-                cells[(row, column)].insert(0, solution[row - 2, column - 1])
+                cells[(row, column)].insert(0, solution[row-2][column-1])
         solved_label.configure(text= "Sudoku Solved")
     else:
         error_label.configure(text = "Sudoku not solvable")

@@ -1,27 +1,33 @@
 import numpy as np
 
+count = 0
 # SOLVES THE SUDOKU PUZZLE
 def possible(grid, row, column, num):
     # Checks if the number is present across the row
     for i in range(9):
-        if grid[i][row] == num and i != column: 
+        if grid[row][i] == num: 
             return False
 
     # Checks if the number is present across the column
     for i in range(9):
-        if grid[column][i] == num and i != row:
+        if grid[i][column] == num:
             return False
 
     # Checks if the number in the small 3 x 3 grid
-    row_start = (row // 3) * 3
-    column_start = (column // 3) * 3
-    for X in range(row_start, row_start + 3):
-        for Y in range(column_start, column_start + 3):  
-            if grid[Y][X] == num:
+    row_start = row - row % 3
+    column_start = column - column % 3
+    for i in range(3):
+        for j in range(3):  
+            if grid[row_start + i][column_start + j] == num:
                 return False    
     return True
 
 def solve_sudoku(grid, row, column):
+    global count 
+    count += 1
+
+    if count > 1000:
+        return False
     # if the recursor reaches the last cell and the entire grid is filled
     if row == 8 and column == 9:
         return True
